@@ -6,26 +6,52 @@ import './AgregarParticipante.css'
 
 function AgregarParticipante() {
   const navigate = useNavigate()
-  const [nuevoParticipante, setNuevoParticipante] = useState({
-    nombre: '',
-    opciones: '',
-    urls: '',
-    intereses: ''
-  })
+  const [nombre, setNombre] = useState('')
+  const [intereses, setIntereses] = useState('')
+  const [opciones, setOpciones] = useState([
+    { id: 1, nombre: '', url: '' },
+  ])
+  const [proximoId, setProximoId] = useState(2)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setNuevoParticipante(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    if (name === 'nombre') {
+      setNombre(value)
+    } else if (name === 'intereses') {
+      setIntereses(value)
+    }
+  }
+
+  const actualizarOpcion = (id, campo, valor) => {
+    setOpciones(opciones.map(op => 
+      op.id === id ? { ...op, [campo]: valor } : op
+    ))
+  }
+
+  const agregarOpcion = () => {
+    setOpciones([...opciones, { id: proximoId, nombre: '', url: '' }])
+    setProximoId(proximoId + 1)
+  }
+
+  const eliminarOpcion = (id) => {
+    if (opciones.length > 1) {
+      setOpciones(opciones.filter(op => op.id !== id))
+    } else {
+      alert('Debe haber al menos una opción de regalo')
+    }
   }
 
   const agregarParticipante = async (e) => {
     e.preventDefault()
     
-    if (!nuevoParticipante.nombre || !nuevoParticipante.opciones) {
-      alert('Por favor completa al menos el nombre y las opciones')
+    if (!nombre.trim()) {
+      alert('Por favor ingresa el nombre del participante')
+      return
+    }
+
+    const opcionesValidas = opciones.filter(op => op.nombre.trim() !== '')
+    if (opcionesValidas.length === 0) {
+      alert('Por favor agrega al menos una opción de regalo')
       return
     }
 
@@ -33,16 +59,20 @@ function AgregarParticipante() {
     const nuevoRef = push(participantesRef)
 
     const nuevo = {
-      nombre: nuevoParticipante.nombre,
-      opciones: nuevoParticipante.opciones.split(',').map(o => o.trim()),
-      urls: nuevoParticipante.urls ? nuevoParticipante.urls.split(',').map(u => u.trim()) : [],
-      intereses: nuevoParticipante.intereses || 'No especificado',
+      nombre: nombre.trim(),
+      opciones: opcionesValidas.map(op => op.nombre.trim()),
+      urls: opcionesValidas.map(op => op.url.trim()).filter(url => url !== ''),
+      intereses: intereses.trim() || 'No especificado',
       fechaCreacion: new Date().toISOString()
     }
 
     await set(nuevoRef, nuevo)
 
-    // Redirigir a la lista
+    setNombre('')
+    setIntereses('')
+    setOpciones([{ id: 1, nombre: '', url: '' }])
+    setProximoId(2)
+    
     navigate('/')
   }
 
@@ -72,7 +102,7 @@ function AgregarParticipante() {
               type="text"
               id="nombre"
               name="nombre"
-              value={nuevoParticipante.nombre}
+              value={nombre}
               onChange={handleInputChange}
               placeholder="Ej: Pedro López"
               required
@@ -80,31 +110,45 @@ function AgregarParticipante() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="opciones">Opciones de regalo (separadas por coma) *</label>
-            <input
-              type="text"
-              id="opciones"
-              name="opciones"
-              value={nuevoParticipante.opciones}
-              onChange={handleInputChange}
-              placeholder="Ej: Libro, Taza, Reloj"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="urls">URLs de las opciones (separadas por coma, opcional)</label>
-            <input
-              type="text"
-              id="urls"
-              name="urls"
-              value={nuevoParticipante.urls}
-              onChange={handleInputChange}
-              placeholder="Ej: https://amazon.com/libro, https://tienda.com/taza"
-            />
-            <small style={{color: '#666', fontSize: '0.85rem', marginTop: '5px', display: 'block'}}>
-              💡 Ingresa las URLs en el mismo orden que las opciones
-            </small>
+            <label>Opciones de regalo *</label>
+            <div className="opciones-container">
+              {opciones.map((opcion, index) => (
+                <div key={opcion.id} className="opcion-item">
+                  <div className="opcion-numero">{index + 1}</div>
+                  <div className="opcion-inputs">
+                    <input
+                      type="text"
+                      placeholder="Nombre del regalo"
+                      value={opcion.nombre}
+                      onChange={(e) => actualizarOpcion(opcion.id, 'nombre', e.target.value)}
+                      className="input-opcion"
+                    />
+                    <input
+                      type="url"
+                      placeholder="URL (opcional)"
+                      value={opcion.url}
+                      onChange={(e) => actualizarOpcion(opcion.id, 'url', e.target.value)}
+                      className="input-url"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => eliminarOpcion(opcion.id)}
+                    className="btn-quitar"
+                    disabled={opciones.length === 1}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={agregarOpcion}
+              className="btn-agregar-opcion"
+            >
+              + Agregar otra opción
+            </button>
           </div>
 
           <div className="form-group">
@@ -113,7 +157,7 @@ function AgregarParticipante() {
               type="text"
               id="intereses"
               name="intereses"
-              value={nuevoParticipante.intereses}
+              value={intereses}
               onChange={handleInputChange}
               placeholder="Ej: Deportes, lectura, música"
             />

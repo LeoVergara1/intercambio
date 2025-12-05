@@ -46,3 +46,149 @@
   background-color: #c82333;
   transform: translateY(-1px);
 }
+
+/* Nuevos estilos para las opciones */
+
+.opciones-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 15px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px dashed #ddd;
+}
+
+.opcion-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.opcion-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.opcion-numero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.opcion-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-opcion,
+.input-url {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease;
+}
+
+.input-opcion:focus,
+.input-url:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.input-opcion::placeholder,
+.input-url::placeholder {
+  color: #999;
+}
+
+.btn-quitar {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.btn-quitar:hover:not(:disabled) {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+.btn-quitar:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-agregar-opcion {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-agregar-opcion:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+@media (max-width: 768px) {
+  .opciones-container {
+    padding: 15px;
+  }
+
+  .opcion-item {
+    flex-direction: column;
+  }
+
+  .opcion-numero {
+    width: 100%;
+    border-radius: 6px;
+  }
+
+  .opcion-inputs {
+    order: 3;
+  }
+
+  .btn-quitar {
+    width: 100%;
+    order: 4;
+    margin-top: 10px;
+  }
+}
+

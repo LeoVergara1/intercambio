@@ -1,0 +1,115 @@
+.acciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 20px 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.accion-card {
+  background: white;
+  border-radius: 16px;
+  padding: 35px 25px;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+}
+
+.accion-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.accion-card.accion-primary {
+  border-color: #4CAF50;
+}
+
+.accion-card.accion-primary:hover {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+}
+
+.accion-card.accion-config {
+  border-color: #f39c12;
+}
+
+.accion-card.accion-config:hover {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  color: white;
+}
+
+.accion-card.accion-admin {
+  border-color: #6c757d;
+}
+
+.accion-card.accion-admin:hover {
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+  color: white;
+}
+
+.accion-card:hover {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.accion-icon {
+  font-size: 4rem;
+  margin-bottom: 15px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.accion-card:hover .accion-icon {
+  animation: none;
+  transform: scale(1.2);
+  transition: transform 0.3s ease;
+}
+
+.accion-card h3 {
+  font-size: 1.5rem;
+  margin: 15px 0 10px 0;
+  font-weight: 700;
+}
+
+.accion-card p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.accion-card:hover p {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .acciones-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .accion-card {
+    padding: 30px 20px;
+  }
+
+  .accion-icon {
+    font-size: 3rem;
+  }
+
+  .accion-card h3 {
+    font-size: 1.3rem;
+  }
+}

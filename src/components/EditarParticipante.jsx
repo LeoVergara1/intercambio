@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ref, onValue, set } from 'firebase/database'
+import { ref, get, set } from 'firebase/database'
 import { database } from '../firebase'
 import './EditarParticipante.css'
 
@@ -12,6 +12,7 @@ function EditarParticipante() {
   const [opciones, setOpciones] = useState([])
   const [proximoId, setProximoId] = useState(1)
   const [cargando, setCargando] = useState(true)
+  const [fechaCreacion, setFechaCreacion] = useState('')
 
   useEffect(() => {
     if (!id) {
@@ -19,13 +20,15 @@ function EditarParticipante() {
       return
     }
 
-    const participanteRef = ref(database, `participantes/${id}`)
-    
-    const unsubscribe = onValue(participanteRef, (snapshot) => {
-      const data = snapshot.val()
-      if (data) {
+    const cargarParticipante = async () => {
+      const participanteRef = ref(database, `participantes/${id}`)
+      const snapshot = await get(participanteRef)
+      
+      if (snapshot.exists()) {
+        const data = snapshot.val()
         setNombre(data.nombre)
         setIntereses(data.intereses || '')
+        setFechaCreacion(data.fechaCreacion || new Date().toISOString())
         
         const opcionesFormatted = data.opciones.map((opcion, index) => ({
           id: index + 1,
@@ -38,9 +41,9 @@ function EditarParticipante() {
       } else {
         navigate('/')
       }
-    })
+    }
 
-    return () => unsubscribe()
+    cargarParticipante()
   }, [id, navigate])
 
   const handleInputChange = (e) => {
@@ -92,7 +95,7 @@ function EditarParticipante() {
       opciones: opcionesValidas.map(op => op.nombre.trim()),
       urls: opcionesValidas.map(op => op.url.trim()).filter(url => url !== ''),
       intereses: intereses.trim() || 'No especificado',
-      fechaCreacion: (await onValue(ref(database, `participantes/${id}/fechaCreacion`), (snapshot) => snapshot.val()))
+      fechaCreacion: fechaCreacion
     }
 
     await set(participanteRef, actualizado)

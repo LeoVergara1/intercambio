@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import ListaParticipantes from './components/ListaParticipantes'
 import AgregarParticipante from './components/AgregarParticipante'
+import EditarParticipante from './components/EditarParticipante'
 import Configuracion from './components/Configuracion'
 import Administrar from './components/Administrar'
 import Acciones from './components/Acciones'
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ListaParticipantes />} />
         <Route path="/agregar" element={<AgregarParticipante />} />
+        <Route path="/editar/:id" element={<EditarParticipante />} />
         <Route path="/configuracion" element={<Configuracion />} />
         <Route path="/administrar" element={<Administrar />} />
         <Route path="/acciones" element={<Acciones />} />

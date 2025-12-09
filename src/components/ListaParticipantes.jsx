@@ -112,6 +112,13 @@ function ListaParticipantes() {
             <div key={participante.id} className="tarjeta-participante">
               <div className="tarjeta-header">
                 <h3>{participante.nombre}</h3>
+                <Link 
+                  to={`/editar/${participante.id}`}
+                  className="btn-editar"
+                  title="Editar participante"
+                >
+                  ✏️
+                </Link>
               </div>
               
               <div className="tarjeta-contenido">

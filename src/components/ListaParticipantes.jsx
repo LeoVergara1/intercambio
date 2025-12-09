@@ -107,6 +107,13 @@ function ListaParticipantes() {
           </div>
         )}
 
+        <div className="participantes-info">
+          <div className="info-card">
+            <span className="info-label">Total de participantes</span>
+            <span className="info-numero">{participantes.length}</span>
+          </div>
+        </div>
+
         <div className="participantes-grid">
           {participantes.map((participante) => (
             <div key={participante.id} className="tarjeta-participante">
